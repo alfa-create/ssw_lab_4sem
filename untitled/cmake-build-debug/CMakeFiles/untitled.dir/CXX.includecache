@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/User/CLionProjects/untitled/generator.h
+algorithm
+-
+iostream
+-
+string
+-
+vector
+-
+type_traits
+-
+random
+-
+exception
+-
+cassert
+-
+
+C:/Users/User/CLionProjects/untitled/main.cpp
+iostream
+-
+generator.h
+C:/Users/User/CLionProjects/untitled/generator.h
+my_stack.h
+C:/Users/User/CLionProjects/untitled/my_stack.h
+my_vector.h
+C:/Users/User/CLionProjects/untitled/my_vector.h
+my_queue.h
+C:/Users/User/CLionProjects/untitled/my_queue.h
+
+C:/Users/User/CLionProjects/untitled/my_queue.h
+
+C:/Users/User/CLionProjects/untitled/my_stack.h
+
+C:/Users/User/CLionProjects/untitled/my_vector.h
+
