@@ -27,6 +27,14 @@ cassert
 C:/Users/User/CLionProjects/untitled/main.cpp
 iostream
 -
+chrono
+-
+stack
+-
+queue
+-
+vector
+-
 generator.h
 C:/Users/User/CLionProjects/untitled/generator.h
 my_stack.h
