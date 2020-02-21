@@ -12,127 +12,194 @@ using namespace std;
 
 int main() {
     try {
-        using ms=std::chrono::milliseconds;
-        cout << endl << "My stack with 15 elements" << endl << "comparison(>/<=), input/output" << endl;
-        my_stack<int> test1;
-        for (int i = 0; i < 15; i++) {
-            cout << i * 2 << "\t";
-            test1.Push(i * 2);
-        };
-        if (test1 > test1)cout << "1Yes" << endl;
-        if (test1 <= test1)cout << "2Yes" << endl;
-        for (int i = 0; i < 15; i++) {
-            cout << test1.Pop() << "\t";
-        };
-        cout << endl << "My queue with 21 elements" << endl << "comparison(!=)and count, input/output" << endl;
-        my_queue<float> test2;
-        for (int i = 0; i < 21; i++) {
-            cout << i * 2.2 << "\t";
-            test2.Push(i * 2.2);
-        };
-        if (test2 != test2)cout << "Yes" << endl;
-        cout << endl << "Count=" << test2.Count() << endl;
-        for (int i = 0; i < 21; i++) {
-            cout << test2.Pop() << "\t";
-        };
-        cout << endl << "My vector with 5 elements" << endl << "at(2)and sum, input/output" << endl;
-        my_vector<int> test3;
-        for (int i = 0; i < 5; i++) {
-            cout << i * 2 << "\t";
-            test3.Push(i * 2);
-        };
-        cout << "\tsum=" << test3.Sum() << "\tat(2)=" << test3.At(2) << endl;
-        for (int i = 0; i < 5; i++) {
-            cout << test3.Pop() << "\t";
-        };
 
+        using ns=std::chrono::nanoseconds;
 
-        cout<<endl<<"performance test"<<endl<<"my stack:";
+        my_stack<int> stack1;
+        std::stack<int> stack2;
+        my_queue<float> queue1;
+        std::queue<float> queue2;
+        my_vector<int> vector1;
+        std::vector<int> vector2;
+
+        cout<<endl;
+        cout<<"\t\t\tPerformance comparison results"<<endl;
+        cout<<"\t\t\t  (all results in nanoseconds)"<<endl;
+        cout<<"type\t\t"<<"push\t\t"<<"pop\t\t"<<"peek\t\t"<<"count\t\t"<<"at"<<endl;
+        cout<<"my_stack\t";
+
         auto start = std::chrono::high_resolution_clock::now();
-        my_stack<int> test_time;
-        for (int i = 0; i < 9999; i++) {
-            test_time.Push(i * 2);
-        };
-        if (test_time > test_time);
-        if (test_time <= test_time);
-        for (int i = 0; i < 9999; i++) {
-            test_time.Pop();
-        };
+        stack1.Push(99);
         auto end = std::chrono::high_resolution_clock::now();
-        auto res=std::chrono::duration_cast<ms>(end-start).count();
-        cout<<res<<endl<<"STL stack: ";
+        auto res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
 
         start = std::chrono::high_resolution_clock::now();
-        std::stack<int> test_time2;
-        for (int i = 0; i < 9999; i++) {
-            test_time2.push(i * 2);
-        };
-        if (test_time2 > test_time2);
-        if (test_time2 <= test_time2);
-        for (int i = 0; i < 9999; i++) {
-            test_time2.pop();
-        };
+        stack1.Pop();
         end = std::chrono::high_resolution_clock::now();
-        res=std::chrono::duration_cast<ms>(end-start).count();
-        cout<<res;
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
 
-        cout<<endl<<"my queue: ";
-        start = std::chrono::high_resolution_clock::now();
-        my_queue<int> test_time3;
-        for (int i = 0; i < 9999; i++) {
-            test_time3.Push(i * 2);
-        };
-        if (test_time3 > test_time3);
-        if (test_time3 <= test_time3);
-        for (int i = 0; i < 9999; i++) {
-            test_time3.Pop();
-        };
-        end = std::chrono::high_resolution_clock::now();
-        res=std::chrono::duration_cast<ms>(end-start).count();
-        cout<<res<<endl<<"STL queue: ";
+        stack1.Push(23);
 
         start = std::chrono::high_resolution_clock::now();
-        std::queue<int> test_time4;
-        for (int i = 0; i < 9999; i++) {
-            test_time4.push(i * 2);
-        };
-        if (test_time4 > test_time4);
-        if (test_time4 <= test_time4);
-        for (int i = 0; i < 9999; i++) {
-            test_time4.pop();
-        };
+        stack1.Peek();
         end = std::chrono::high_resolution_clock::now();
-        res=std::chrono::duration_cast<ms>(end-start).count();
-        cout<<res;
-
-        cout<<endl<<"my vector: ";
-        start = std::chrono::high_resolution_clock::now();
-        my_vector<int> test_time5;
-        for (int i = 0; i < 9999; i++) {
-            test_time5.Push(i*2);
-        };
-        if (test_time5 > test_time5);
-        if (test_time5 <= test_time5);
-        for (int i = 0; i < 9999; i++) {
-            test_time5.Pop();
-        };
-        end = std::chrono::high_resolution_clock::now();
-        res=std::chrono::duration_cast<ms>(end-start).count();
-        cout<<res<<endl<<"STL vector: ";
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
 
         start = std::chrono::high_resolution_clock::now();
-        std::vector<int> test_time6;
-        for (int i = 0; i < 9999; i++) {
-            test_time6.push_back(i * 2);
-        };
-        if (test_time6 > test_time6);
-        if (test_time6 <= test_time6);
-        for (int i = 0; i < 9999; i++) {
-            test_time6.pop_back();
-        };
+        stack1.Count();
         end = std::chrono::high_resolution_clock::now();
-        res=std::chrono::duration_cast<ms>(end-start).count();
-        cout<<res;
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+        cout<<"----"<<endl;
+
+        cout<<"STL stack\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        stack2.push(99);
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        stack2.pop();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        stack2.push(23);
+        int b = 0;
+
+        start = std::chrono::high_resolution_clock::now();
+        b = stack2.top();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        stack2.push(23);
+
+        start = std::chrono::high_resolution_clock::now();
+        b=stack2.size();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+        cout<<"----"<<endl;
+
+        cout<<"my_queue\t";
+        start = std::chrono::high_resolution_clock::now();
+        queue1.Push(2.1);
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        queue1.Pop();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        queue1.Peek();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        queue1.Count();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+        cout<<"----"<<endl;
+
+        cout<<"STL queue\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        queue2.push(2.2);
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        queue2.pop();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        float b2=0;
+        queue2.push(22);
+
+        start = std::chrono::high_resolution_clock::now();
+        b2=queue2.front();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        b=queue2.size();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+        cout<<"----"<<endl;
+
+        cout<<"my_vector\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        vector1.Push(22);
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        vector1.Pop();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+        cout<<"----\t\t";
+
+        vector1.Push(22);
+
+        start = std::chrono::high_resolution_clock::now();
+        vector1.Count();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        vector1.At(0)=1;
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t"<<endl;
+
+        cout<<"STL vector\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        vector2.push_back(22);
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        vector2.pop_back();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+        cout<<"----\t\t";
+
+        vector2.push_back(22);
+
+        start = std::chrono::high_resolution_clock::now();
+        b=vector2.size();
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
+
+        start = std::chrono::high_resolution_clock::now();
+        vector2.at(0)=1;
+        end = std::chrono::high_resolution_clock::now();
+        res=std::chrono::duration_cast<ns>(end-start).count();
+        cout<<res<<"\t\t";
     }
     catch (const std::exception &exp) {
         cout << exp.what() << endl;
