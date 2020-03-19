@@ -6,33 +6,31 @@ class my_list {
 private:
     class node{
     public:
-        T value { NULL };
+        T value { 0 };
         node *linkNext { nullptr };
 
-        node(T val,node *link=nullptr){
-            value=val;
-            linkNext=link;
+        explicit node(T val,node *link=nullptr){
+            value = val;
+            linkNext = link;
         }
 
-        ~node(){
-        }
+        ~node() =  default;
     };
 
     node *head { nullptr };
-    int size { 0 };
+    size_t size { 0 };
 
 public:
-    my_list();
+    my_list() = default;
     my_list(const std::initializer_list<T> &list);
     ~my_list();
     void PushBack(T data);
     void PushFront(T data);
     int Count ();
-    void Print();
     T PopBack();
     T PopFront();
     void Insert(T value, int index);
-    T Erase(int index);
+    void Erase(int index);
 
     T* Begin(){
         return &head->value;
@@ -62,7 +60,7 @@ public:
         throw std::out_of_range("list haven't el-t with this value");
     }
 
-    T& operator[] (const int index);
+    T& operator[] (int index);
 
     friend bool operator> (const my_list<T> &m,const my_list<T> &m2){
         node *cur1 = m.head;
@@ -70,10 +68,13 @@ public:
 
         while ((cur1->linkNext != nullptr) && (cur2->linkNext != nullptr)){
             if (cur1->value < cur2->value) return false;
+            if (cur1->value > cur2->value) return true;
             cur1 = cur1->linkNext;
             cur2 = cur2->linkNext;
         }
+
         if (cur1->value > cur2->value) return true;
+        if (cur1->value < cur2->value) return false;
         return (m.size > m2.size);
     }
 
@@ -117,19 +118,15 @@ public:
 
         out<<"( ";
         while(current->linkNext != nullptr){
-            out<<current->value<<", ";
+            out << current->value << ", ";
             current = current->linkNext;
         }
-        out<<current->value<<" )";
+        out << current->value<<" )";
         return out;
     };
 
 };
 
-template<typename T>
-my_list<T>::my_list(){
-
-}
 
 template<typename T>
 my_list<T>::my_list(const std::initializer_list<T> &list) {
@@ -181,16 +178,6 @@ void my_list<T>::PushFront(T data) {
 }
 
 template<class T>
-void my_list<T>::Print() {
-        node *current = this->head;
-        while (current->linkNext != nullptr) {
-            std::cout<<current->value<<"\t";
-            current = current->linkNext;
-        }
-        std::cout<<current->value<<std::endl;
-}
-
-template<class T>
 T my_list<T>::PopBack() {
     if (head == nullptr ) throw std::out_of_range("list is empty");
 
@@ -202,7 +189,8 @@ T my_list<T>::PopBack() {
         del = current;
         current = current->linkNext;
     }
-    del->linkNext = nullptr;
+
+    if (del != nullptr) del->linkNext = nullptr;
     ret = current->value;
     delete current;
     size--;
@@ -223,7 +211,7 @@ T my_list<T>::PopFront() {
 }
 
 template<class T>
-T &my_list<T>::operator[](const int index) {
+T &my_list<T>::operator[](int index) {
     if (index >= size) throw std::out_of_range("index is more then size of list");
     if (index < 0) throw std::out_of_range("index will be positive number");
 
@@ -262,27 +250,23 @@ void my_list<T>::Insert(T value, int index) {
 }
 
 template<class T>
-T my_list<T>::Erase(int index) {
+void my_list<T>::Erase(int index) {
     if(index >= size) throw std::out_of_range("index is more then size of list");
     if (index < 0) throw std::out_of_range("index will be positive number");
 
     if (index == 0){
-        return (PopFront());
+       PopFront();
     }
     else{
         node *prev = head;
         node *del = nullptr;
-        T data;
-
         for (int i = 0; i < index -1 ;i++){
             prev = prev->linkNext;
         }
         del = prev->linkNext;
         prev->linkNext = del->linkNext;
-        data = del->value;
         delete del;
         size--;
-        return data;
     }
 }
 

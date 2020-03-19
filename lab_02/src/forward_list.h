@@ -2,39 +2,37 @@
 #define LAB2V2_FORWARD_LIST_H
 
 template<class T>
-class my_forward_list {
+class my_double_linked_list {
 private:
 
     class node{
     public:
-        T value { NULL };
+        T value { 0 };
         node *linkNext { nullptr };
         node *linkPrev { nullptr };
 
-        node(T data, node* linkN = nullptr, node* linkP = nullptr){
+        explicit node(T data, node* linkN = nullptr, node* linkP = nullptr){
             value = data;
             linkNext = linkN;
             linkPrev = linkP;
         }
-        ~node (){
-
-        }
+        ~node () = default;
     };
 
     node *head { nullptr };
-    int size { 0 };
+    size_t size { 0 };
 
 public:
 
-    my_forward_list();
-    my_forward_list(const std::initializer_list<T> &list);
-    ~my_forward_list();
+    my_double_linked_list() = default;
+    my_double_linked_list(const std::initializer_list<T> &list);
+    ~my_double_linked_list();
     void PushFront(T data);
     void PushBack(T data);
     T PopFront();
     T PopBack();
     void Insert(T data, int index);
-    T Erase(int index);
+    void Erase(int index);
     T* Begin();
     T* End();
     T FindValue (T val);
@@ -44,32 +42,36 @@ public:
         return size;
     }
 
-    friend std::ostream& operator<< (std::ostream &out, const my_forward_list<T> &m){
+    friend std::ostream& operator<< (std::ostream &out, const my_double_linked_list<T> &m){
         node *current = m.head;
 
-        out<<"( ";
+        out << "( ";
         while(current->linkNext != nullptr){
-            out<<current->value<<", ";
+            out << current->value << ", ";
             current = current->linkNext;
         }
-        out<<current->value<<" )";
+        out << current->value << " )";
         return out;
     };
 
-    friend bool operator> (const my_forward_list<T> &m,const my_forward_list<T> &m2){
+    friend bool operator> (const my_double_linked_list<T> &m,const my_double_linked_list<T> &m2){
         node *cur1 = m.head;
         node *cur2 = m2.head;
 
         while ((cur1->linkNext != nullptr) && (cur2->linkNext != nullptr)){
             if (cur1->value < cur2->value) return false;
+            if (cur1->value > cur2->value) return true;
+
             cur1 = cur1->linkNext;
             cur2 = cur2->linkNext;
         }
         if (cur1->value > cur2->value) return true;
+        if (cur1->value < cur2->value) return false;
+
         return (m.size > m2.size);
     }
 
-    friend bool operator== (const my_forward_list<T> &m,const my_forward_list<T> &m2){
+    friend bool operator== (const my_double_linked_list<T> &m,const my_double_linked_list<T> &m2){
         node *cur1 = m.head;
         node *cur2 = m2.head;
 
@@ -88,30 +90,25 @@ public:
         return (m.size == m2.size);
     }
 
-    friend bool operator>= (const my_forward_list<T> &m,const my_forward_list<T> &m2){
+    friend bool operator>= (const my_double_linked_list<T> &m,const my_double_linked_list<T> &m2){
         return ((m > m2) || (m == m2));
     }
 
-    friend bool operator<= (const my_forward_list<T> &m,const my_forward_list<T> &m2){
+    friend bool operator<= (const my_double_linked_list<T> &m,const my_double_linked_list<T> &m2){
         return !(m > m2);
     }
 
-    friend bool operator!= (const my_forward_list<T> &m,const my_forward_list<T> &m2){
+    friend bool operator!= (const my_double_linked_list<T> &m,const my_double_linked_list<T> &m2){
         return !(m == m2);
     }
 
-    friend bool operator<(const my_forward_list<T> &m,const my_forward_list<T> &m2){
+    friend bool operator<(const my_double_linked_list<T> &m,const my_double_linked_list<T> &m2){
         return !(m >= m2);
     }
 };
 
 template<class T>
-my_forward_list<T>::my_forward_list() {
-
-}
-
-template<class T>
-my_forward_list<T>::~my_forward_list() {
+my_double_linked_list<T>::~my_double_linked_list() {
     while (size){
         PopFront();
     }
@@ -119,7 +116,7 @@ my_forward_list<T>::~my_forward_list() {
 }
 
 template<class T>
-void my_forward_list<T>::PushFront(T data) {
+void my_double_linked_list<T>::PushFront(T data) {
     if (head == nullptr){
         head = new node(data);
     }
@@ -132,7 +129,7 @@ void my_forward_list<T>::PushFront(T data) {
 }
 
 template<class T>
-void my_forward_list<T>::PushBack(T data) {
+void my_double_linked_list<T>::PushBack(T data) {
     if (head == nullptr){
         head = new node (data);
     }
@@ -149,7 +146,7 @@ void my_forward_list<T>::PushBack(T data) {
 }
 
 template<class T>
-T my_forward_list<T>::PopFront() {
+T my_double_linked_list<T>::PopFront() {
     if (head == nullptr) throw std::out_of_range("forward list is empty");
     node *del = head;
     T ret = head->value;
@@ -165,7 +162,7 @@ T my_forward_list<T>::PopFront() {
 }
 
 template<class T>
-T my_forward_list<T>::PopBack() {
+T my_double_linked_list<T>::PopBack() {
     if(head == nullptr) throw std::out_of_range("forward list is empty");
     node *current = head;
 
@@ -184,7 +181,7 @@ T my_forward_list<T>::PopBack() {
 }
 
 template<class T>
-void my_forward_list<T>::Insert(T data, int index) {
+void my_double_linked_list<T>::Insert(T data, int index) {
     if (index >= size) throw std::out_of_range("index more then size of structure");
     if (index < 0 ) throw std::out_of_range("index will be positive number");
 
@@ -200,26 +197,26 @@ void my_forward_list<T>::Insert(T data, int index) {
         }
 
         next = current->linkNext;
-        current->linkNext = new node (data,next,current);
+        node *insert = new node (data, next, current);
+        current->linkNext = insert;
+        next->linkPrev = insert;
     }
 
     size++;
 }
 
 template<class T>
-T my_forward_list<T>::Erase(int index) {
+void my_double_linked_list<T>::Erase(int index) {
     if (index >= size) throw std::out_of_range("index more then size of structure");
     if (index < 0 ) throw std::out_of_range("index will be positive number");
 
     if (index == 0){
-        return PopFront();
+        PopFront();
     }
     else{
         node *current = head;
         node *next = nullptr;
         node *prev = nullptr;
-        T val;
-
         for (int i = 0;i < index ;i++){
             current = current->linkNext;
         }
@@ -227,28 +224,26 @@ T my_forward_list<T>::Erase(int index) {
         prev = current->linkPrev;
         prev->linkNext = next;
         next->linkPrev = prev;
-        val = current->value;
         delete current;
         size--;
-        return val;
     }
 
 }
 
 template<class T>
-my_forward_list<T>::my_forward_list(const std::initializer_list<T> &list) {
+my_double_linked_list<T>::my_double_linked_list(const std::initializer_list<T> &list) {
     for (int i = 0; i < list.size();i++){
         PushBack(list.begin()[i]);
     }
 }
 
 template<class T>
-T *my_forward_list<T>::Begin() {
+T *my_double_linked_list<T>::Begin() {
     return &head->value;
 }
 
 template<class T>
-T *my_forward_list<T>::End() {
+T *my_double_linked_list<T>::End() {
     node *current = head;
     while(current->linkNext != nullptr){
         current = current->linkNext;
@@ -257,7 +252,7 @@ T *my_forward_list<T>::End() {
 }
 
 template<class T>
-T my_forward_list<T>::FindValue(T val) {
+T my_double_linked_list<T>::FindValue(T val) {
     node *current = head;
 
     while(current->linkNext != nullptr){
@@ -271,7 +266,7 @@ T my_forward_list<T>::FindValue(T val) {
 }
 
 template<class T>
-T *my_forward_list<T>::FindIndex(T val) {
+T *my_double_linked_list<T>::FindIndex(T val) {
     node *current = head;
 
     while (current->linkNext != nullptr){

@@ -11,14 +11,14 @@ int main() {
         cout<<"\t\t\tTEST list:\n";
         my_list<int> test1;
 
-        cout<<"number for push front in list:\n";
+        cout<<"numbers for push front in list:\n";
         for (int i = 0; i < 15; i++){
             test1.PushFront(i*2);
             cout<<i*2<<"\t";
         }
         cout<<"\nList: \n"<<test1<<endl;
 
-        cout<<"number for push back in list:\n";
+        cout<<"numbers for push back in list:\n";
         for (int i = 0; i < 5; i++){
             test1.PushBack(i);
             cout<<i<<"\t";
@@ -67,7 +67,7 @@ int main() {
         cout<<endl<<endl;
         cout<<"TEST forward list:\n";
 
-        my_forward_list<int> test2;
+        my_double_linked_list<int> test2;
 
         cout<<"number for push front in list:\n";
         for (int i = 0; i < 15; i++){
@@ -109,7 +109,7 @@ int main() {
 
         cout<<"Count:\n"<<test2.Count()<<endl;
 
-        my_forward_list<int> test2_ {20,12,3};
+        my_double_linked_list<int> test2_ {20,12,3};
 
         cout<<endl;
         cout<<"first list:\n"<<test2<<endl;
@@ -121,6 +121,8 @@ int main() {
         if (test2 == test2_) cout<<"first == second"<<endl;
         else cout<<"first != second"<<endl;
 
+
+        /////////////////////////////
         cout<<endl<<endl<<endl;
         cout<<"Test ring buffer:\n";
         my_ring_buffer<int> test3(5);
@@ -132,9 +134,10 @@ int main() {
         }
         cout<<"\nbuffer:\n"<<test3<<endl;
 
-        cout<<"buffer:\n"<<test3<<endl;
-        cout<<"first element:\n";
+        cout<<"head:\n";
         cout<<*test3.Begin()<<endl;
+        cout<<"tail:\n";
+        cout<<*test3.End()<<endl;
 
         cout<<"pop 4 el-t's:\n";
         for (int i = 0; i < 4; i++){
@@ -142,10 +145,10 @@ int main() {
         }
         cout<<"\n Buffer:\n"<<test3<<endl;
 
-        cout<<"Count: "<<test3.Count();
+        cout<<"Count: "<<test3.Count() << endl;
 
 
-        my_ring_buffer<int> test3_(5,{1,2,3,4,5});
+        my_ring_buffer<int> test3_{1,2,3,4,5};
 
         cout<<"buf 1: "<<test3<<endl;
         cout<<"buf 2: "<<test3_<<endl;
