@@ -2,6 +2,8 @@
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
+cmake-build-debug
+Makefile
 Testing
 cmake_install.cmake
 install_manifest.txt
@@ -9,6 +11,16 @@ compile_commands.json
 CTestTestfile.cmake
 *.cpp.orig
 *.h.orig
+*.bin
+*.cmake
+
+# wiki
+wiki
+images
+
+# other students fckup
+untitled
+
 
 # VS User-specific files
 *.rsuser
@@ -27,6 +39,7 @@ mono_crash.*
 *.lo
 *.o
 *.obj
+
 
 # Precompiled Headers
 *.gch
