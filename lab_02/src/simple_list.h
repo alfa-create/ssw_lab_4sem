@@ -114,6 +114,7 @@ public:
     }
 
     friend std::ostream& operator<< (std::ostream &out, const my_list<T> &m){
+        if ( m.head == nullptr ) throw std::out_of_range("List is empty");
         node *current = m.head;
 
         out<<"( ";
@@ -122,6 +123,7 @@ public:
             current = current->linkNext;
         }
         out << current->value<<" )";
+
         return out;
     };
 
@@ -194,6 +196,7 @@ T my_list<T>::PopBack() {
     ret = current->value;
     delete current;
     size--;
+    if ( size == 0) head = nullptr;
 
     return ret;
 }
@@ -206,6 +209,7 @@ T my_list<T>::PopFront() {
     head = head->linkNext;
     delete del;
     size--;
+    if ( size == 0) head = nullptr;
 
     return ret;
 }
@@ -268,6 +272,8 @@ void my_list<T>::Erase(int index) {
         delete del;
         size--;
     }
+    if ( size == 0) head = nullptr;
+
 }
 
 template<class T>

@@ -11,8 +11,8 @@ private:
         node *linkNext { nullptr };
 
         explicit node(T val,node *link=nullptr){
-            value=val;
-            linkNext=link;
+            value = val;
+            linkNext = link;
         }
         ~node() = default;
     };
@@ -20,7 +20,7 @@ private:
     node *head { nullptr };
     node *tail { nullptr };
     size_t size { 0 };
-    size_t maxSize { 0 };
+    size_t maxSize {0 };
 
 public:
     explicit my_ring_buffer(int size);
@@ -39,12 +39,12 @@ public:
     }
 
     friend std::ostream& operator<< (std::ostream &out, const my_ring_buffer<T> &m){
-        if (m.size == 0) return out;
+        if (m.size == 0) throw std::out_of_range("Buffer is empty");
         node *current = m.head;
         int count = m.size;
 
         out<<"( ";
-        while((current != m.tail) || (count != 0)){
+        while(count != 0){
             out<<current->value<<", ";
             current = current->linkNext;
             count--;
@@ -130,29 +130,33 @@ template<class T>
 my_ring_buffer<T>::~my_ring_buffer() {
     node *current = head;
     node *del = nullptr;
-    while ((current != tail) || (size > 0)){
+    while (maxSize > 0){
         del = current;
         current = current->linkNext;
         delete del;
-        size--;
+        maxSize--;
     }
-    delete head;
     head = nullptr;
-    delete tail;
     tail = nullptr;
 }
 
 template<class T>
 void my_ring_buffer<T>::PushBack(T data) {
-    if ((tail == head) && (size != 0)) head = head->linkNext;
-    tail->value = data;
-    tail = tail->linkNext;
+    if ( size == 0) {
+        tail->value = data;
+    }
+    else {
+        if (tail->linkNext == head) head = head->linkNext;
+        tail = tail->linkNext;
+        tail ->value = data;
+    }
     if (size != maxSize) size++;
 }
 
 template<class T>
 T my_ring_buffer<T>::PopFront() {
     if (size == 0) throw std::out_of_range("the ring buffer is empty");
+
     T ret = head->value;
     head = head->linkNext;
     size --;
@@ -207,7 +211,7 @@ T *my_ring_buffer<T>::FindIndex(T data) {
 
 template<class T>
 my_ring_buffer<T>::my_ring_buffer( const std::initializer_list<T> &list) {
-    if (list.size() == 0) throw std::out_of_range("buffer is empty");
+    if (list.size() == 0) throw std::out_of_range("initializer list is empty");
 
     this->maxSize = list.size();
     this->size = this->maxSize;
@@ -217,8 +221,8 @@ my_ring_buffer<T>::my_ring_buffer( const std::initializer_list<T> &list) {
         current->linkNext = new node(list.begin()[i]);
         current = current->linkNext;
     }
+    tail = current;
     current->linkNext = head;
-    tail = head;
 }
 
 

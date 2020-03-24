@@ -43,6 +43,7 @@ public:
     }
 
     friend std::ostream& operator<< (std::ostream &out, const my_double_linked_list<T> &m){
+        if ( m.head == nullptr ) throw std::out_of_range("List is empty");
         node *current = m.head;
 
         out << "( ";
@@ -157,6 +158,7 @@ T my_double_linked_list<T>::PopFront() {
     }
     delete del;
     size--;
+    if ( size == 0 ) head = nullptr;
 
     return ret;
 }
@@ -177,6 +179,8 @@ T my_double_linked_list<T>::PopBack() {
     }
     delete current;
     size--;
+    if ( size == 0 ) head = nullptr;
+
     return ret;
 }
 
