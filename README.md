@@ -13,12 +13,16 @@ Implementation of single/double linked list, circular buffer.
 
 Implementation of general tree and binary search tree. 
 
+## lab_04
+
+Implementation of map and hash-table.
+
 
 What we will be do:
 
 - build different structures of data;
 - compare our realization with STL;
-- ~~may be something also?~~
+- implement arithmetic parser;
 
 
 
@@ -40,7 +44,6 @@ To work with *git* you should to use [Github client](https://desktop.github.com/
 - `git diff`
 - `git fetch`
 - `git remote`
-
 
 
 ## Useful
