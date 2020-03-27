@@ -46,3 +46,9 @@ Antigua and Barbuda, Saint John
 Brazil, Rio de Janeiro
 
 ```
+
+
+
+### Примечание
+
+К сожалению *Github* убирает в конце пустую строку, поэтому вам необходимо самим её добавить.
