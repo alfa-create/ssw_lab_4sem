@@ -24,8 +24,6 @@ What we will be do:
 - compare our realization with STL;
 - implement arithmetic parser;
 
-
-
 ## How work with this repository
 
 You have to **fork** this repository, create your **branch** and complete tasks. **All changes** you will be **commit** and **push** in your **forked repository**. After you make sure that everything works, you send **pull request** to **this** repository. For updating (synchronize) your copy (fork) repository, you have to **set upstream** to this repository, **fetch** changes **from the upstream** (this) repository, **merge** the changes **into your local** repository and **push** them **to your remote** repository.
@@ -56,6 +54,10 @@ To work with *git* you should to use [Github client](https://desktop.github.com/
 - [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
 - [C++ FAQ](https://isocpp.org/faq)
 
+- [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
+
+- [C++ FAQ](https://isocpp.org/faq)
+
 - [Multi language online documentation](https://docs.w3cub.com/cpp/)
 - [Online C++ Benchmark](http://quick-bench.com/)
 - [Jetbrain Student License](https://www.jetbrains.com/shop/eform/students)
@@ -77,11 +79,11 @@ To work with *git* you should to use [Github client](https://desktop.github.com/
 - [How to make friends CMake and Visual Studio[2]](https://docs.microsoft.com/ru-ru/cpp/build/cmake-projects-in-visual-studio?view=vs-2019)
 - [How to import CMake project in Qt Creator](https://codeyarns.com/2016/01/26/how-to-import-cmake-project-in-qt-creator/)
 
-
 # [Wiki](https://github.com/GOOD-Stuff/ssw_lab_4sem/wiki)
 
 - [Как сделать "форк" репозитория?](https://github.com/GOOD-Stuff/ssw_lab_4sem/wiki);
 - [А как мне обновить свой "форк"?](https://bit.ly/2QUZmFf);
 - [Не могу обновить свой форк из-за конфликта](https://bit.ly/3a0WaiO);
 - [FAQ и прочее по работам](https://github.com/GOOD-Stuff/ssw_lab_4sem/wiki);
+
 
