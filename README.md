@@ -17,12 +17,21 @@ Implementation of general tree and binary search tree.
 
 Implementation of map and hash-table.
 
+## lab_05
+
+Comparison of implemented data structures.
+
+## lab_06 
+
+Implementation of scanner of arithmetical expression. 
+
 
 What we will be do:
 
 - build different structures of data;
 - compare our realization with STL;
 - implement arithmetic parser;
+
 
 ## How work with this repository
 
