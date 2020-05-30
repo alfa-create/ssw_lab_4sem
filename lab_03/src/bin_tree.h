@@ -25,6 +25,10 @@ private:
     size_t size { 0 };
     void PrintPreorder (node* head);
     size_t NodeHeight (node* head);
+    size_t WidthNode (node* p);
+    bool ComparisonEqually (node* p, node* p1);
+    bool ComparisonMore (node* p, node* p1);
+
 
     int BalanceFactor (node* p){
         return NodeHeight(p->ptrRight)-NodeHeight(p->ptrLeft);
@@ -247,12 +251,16 @@ void bin_tree<T>::DeleteTree(bin_tree::node *p) {
 
 template<class T>
 bool bin_tree<T>::operator==(const bin_tree<T> &m) {
-    return true;
+    if ( this->size == 0 || m.size == 0 ) throw std::out_of_range ("tree is empty");
+    return ComparisonEqually(this->root, m.root);
+
+
 }
 
 template<class T>
 bool bin_tree<T>::operator>(const bin_tree<T> &m) {
-    return false;
+    if ( this->size == 0 || m.size == 0 ) throw std::out_of_range ("tree is empty");
+    return ComparisonMore(this->root, m.root);
 }
 
 template<class T>
@@ -260,6 +268,47 @@ bin_tree<T>::bin_tree(const std::initializer_list<T> &list) {
     for ( int i = 0; i < list.size(); i++){
         Push(list.begin()[i]);
     }
+}
+
+template<class T>
+size_t bin_tree<T>::WidthNode(bin_tree::node *p) {
+    size_t sum = 0;
+    if ( p->ptrLeft != nullptr ) sum++;
+    if ( p->ptrRight != nullptr ) sum++;
+    return sum;
+}
+
+template<class T>
+bool bin_tree<T>::ComparisonEqually(bin_tree::node *p, bin_tree::node *p1) {
+    if ( p == nullptr && p1 == nullptr ) return true;
+    if ( p == nullptr || p1 == nullptr ) return false;
+    bool ans = true;
+    ans = (p->value == p1->value);
+    if (!ans) return false;
+    ans = WidthNode(p) == WidthNode(p1);
+    if (ans){
+        ans = ComparisonEqually (p->ptrLeft, p1->ptrLeft);
+        ans = ComparisonEqually(p->ptrRight, p1->ptrRight);
+    }
+    else return false;
+    return ans;
+}
+
+template<class T>
+bool bin_tree<T>::ComparisonMore(bin_tree::node *p, bin_tree::node *p1) {
+    if ( p != nullptr && p1 == nullptr ) return true;
+    if ( p == nullptr && p1 != nullptr ) return false;
+    if ( p == nullptr && p1 == nullptr ) return false;
+    bool ans = true;
+    ans = (p->value >= p1->value);
+    if (!ans) return false;
+    ans = WidthNode(p) >= WidthNode(p1);
+    if (ans){
+        ans = ComparisonMore(p->ptrLeft, p1->ptrLeft);
+        ans = ComparisonMore(p->ptrRight, p1->ptrRight);
+    }
+    else return false;
+    return ans;
 }
 
 

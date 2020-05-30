@@ -27,6 +27,9 @@ private:
     size_t HeightNode (node *p);
     void PrintPreorder(node *p);
     T SumNodes (node *p);
+    size_t WidthNode (node* p, int level);
+    bool ComparisonEqually (node* p, node* p1);
+    bool ComparisonMore (node* p, node* p1);
 
     node* FindNode ( T data, node* p){
         if (size == 0) throw std::out_of_range("tree is empty");
@@ -67,6 +70,21 @@ public:
         return FindNode(data, root);
     }
 
+    bool operator == (tree<T> const &m);
+    bool operator != (tree<T> const &m){
+        return !(this->operator==(m));
+    };
+    bool operator > (tree<T> const &m);
+    bool operator < (tree<T> const &m){
+        return !(this->operator>=(m));
+    };
+    bool operator >= (tree<T> const &m){
+        return (this->operator>(m) || this->operator==(m));
+    };
+    bool operator <= (tree<T> const &m){
+        return !(this->operator>(m));
+    };
+
 };
 
 template<class T>
@@ -78,10 +96,11 @@ void tree<T>::Push(T key, T data) {
         if (current->downLvl == nullptr) {
             current->downLvl = new node(data);
         } else {
-            while (current->downLvl != nullptr) {
-                current = current->downLvl;
+            current = current->downLvl;
+            while (current->thisLvl != nullptr) {
+                current = current->thisLvl;
             }
-            current->downLvl = new node(data);
+            current->thisLvl = new node(data);
         }
     }
     size++;
@@ -177,6 +196,71 @@ tree<T>::tree(const std::initializer_list<T> &list) {
         else Push(root->value, list.begin()[i]);
         size++;
     }
+}
+
+template<class T>
+bool tree<T>::operator==(const tree<T> &m) {
+    if ( this->size == 0 || m.size == 0 ) throw std::out_of_range ("tree is empty");
+    return ComparisonEqually(this->root, m.root);
+}
+
+template<class T>
+bool tree<T>::operator>(const tree<T> &m) {
+    if ( this->size == 0 || m.size == 0 ) throw std::out_of_range ("tree is empty");
+    return ComparisonMore(this->root, m.root);
+}
+
+template<class T>
+size_t tree<T>::WidthNode(tree::node *p, int level) {
+    if ( p == nullptr ) return 0;
+    if ( level <= 0 ) return 0;
+    return (WidthNode( p->downLvl,level -1 ) + ( level == 1 ) + WidthNode( p->thisLvl, level));
+
+}
+
+template<class T>
+bool tree<T>::ComparisonEqually(tree::node *p, tree::node *p1) {
+    if ( p == nullptr && p1 == nullptr ) return true;
+    if ( p == nullptr || p1 == nullptr ) return false;
+    bool ans = true;
+    ans = (p->value == p1->value);
+    if (!ans) return false;
+    ans = WidthNode(p, HeightNode(p)) == WidthNode(p1, HeightNode(p1));
+    if (ans){
+        node* current = p->downLvl;
+        node* current2 = p1->downLvl;
+        while ( current != nullptr && current2 != nullptr ){
+            ans = ComparisonEqually(current, current2);
+            if (!ans) break;
+            current = current->thisLvl;
+            current2 = current2->thisLvl;
+        }
+    }
+    else return false;
+    return ans;
+}
+
+template<class T>
+bool tree<T>::ComparisonMore(tree::node *p, tree::node *p1) {
+    if ( p != nullptr && p1 == nullptr ) return true;
+    if ( p == nullptr && p1 != nullptr ) return false;
+    if ( p == nullptr && p1 == nullptr ) return false;
+    bool ans = true;
+    ans = (p->value >= p1->value);
+    if (!ans) return false;
+    ans = WidthNode(p, HeightNode(p)) >= WidthNode(p1, HeightNode(p1));
+    if (ans){
+        node* current = p->downLvl;
+        node* current2 = p1->downLvl;
+        while ( current != nullptr && current2 != nullptr ){
+            ans = ComparisonMore(current, current2);
+            if (!ans) break;
+            current = current->thisLvl;
+            current2 = current2->thisLvl;
+        }
+    }
+    else return false;
+    return ans;
 }
 
 
