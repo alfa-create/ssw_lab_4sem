@@ -1,6 +1,6 @@
 #ifndef LAB_03_BIN_TREE_H
 #define LAB_03_BIN_TREE_H
-
+#include <vector>
 #include <variant>
 
 template <class T>
@@ -23,14 +23,14 @@ private:
 
     node* root {nullptr };
     size_t size { 0 };
-    void PrintPreorder (node* head);
-    size_t NodeHeight (node* head);
-    size_t WidthNode (node* p);
-    bool ComparisonEqually (node* p, node* p1);
-    bool ComparisonMore (node* p, node* p1);
+    void PrintPreorder (const node* head);
+    size_t NodeHeight (const node* head);
+    size_t WidthNode (const node* p);
+    bool ComparisonEqually (const node* p, const node* p1);
+    bool ComparisonMore (const node* p, const node* p1);
 
 
-    int BalanceFactor (node* p){
+    int BalanceFactor (const node* p){
         return NodeHeight(p->ptrRight)-NodeHeight(p->ptrLeft);
     };
 
@@ -38,8 +38,6 @@ private:
         node* q = p->ptrLeft;
         p->ptrLeft = q->ptrRight;
         q->ptrRight = p;
-        NodeHeight(p);
-        NodeHeight(q);
         return q;
     }
 
@@ -47,13 +45,10 @@ private:
         node* p = q->ptrRight;
         q->ptrRight = p->ptrLeft;
         p->ptrLeft = q;
-        NodeHeight(q);
-        NodeHeight(p);
         return p;
     }
 
     node* BalanceNode (node* p){
-        NodeHeight(p);
         if( BalanceFactor(p)==2 )
         {
             if( BalanceFactor(p->ptrRight) < 0 )
@@ -69,7 +64,7 @@ private:
         return p;
     }
 
-    T SumNodes (node* p);
+    T SumNodes (const node* p);
     void DeleteTree (node* p);
 
 public:
@@ -82,10 +77,10 @@ public:
     void Print();
     void Pop ( T data );
     size_t Height ();
-    std::variant<T> Path (T data );
+    std::variant<int, std::vector<int>> Path (T data );
     T SumTrees(bin_tree<T> &m);
 
-    node* Find( T data ){
+    node* Find(const T data ){
         node* current = root;
         while ( current != nullptr ){
             if ( current->value == data ) return current;
@@ -120,6 +115,14 @@ public:
 
 };
 
+
+template<class T>
+bin_tree<T>::bin_tree(const std::initializer_list<T> &list) {
+    for ( int i = 0; i < list.size(); i++){
+        Push(list.begin()[i]);
+    }
+}
+
 template<class T>
 void bin_tree<T>::Push(T data) {
     if ( root == nullptr ){
@@ -150,7 +153,7 @@ void bin_tree<T>::Print() {
 }
 
 template<class T>
-void bin_tree<T>::PrintPreorder(bin_tree::node *head) {
+void bin_tree<T>::PrintPreorder(const bin_tree::node *head) {
     if ( head == nullptr ){
         std::cout << ".";
         return;
@@ -187,7 +190,7 @@ void bin_tree<T>::Pop(T data) {
 }
 
 template<class T>
-size_t bin_tree<T>::NodeHeight(bin_tree::node *head) {
+size_t bin_tree<T>::NodeHeight(const bin_tree::node *head) {
     size_t s = 0, l = 0, r = 0;
     if ( head != nullptr ){
         l = NodeHeight( head->ptrLeft );
@@ -199,24 +202,31 @@ size_t bin_tree<T>::NodeHeight(bin_tree::node *head) {
 
 template<class T>
 size_t bin_tree<T>::Height() {
+    if ( size == 0 ) throw std::out_of_range("tree is empty");
+    if ( size == 1 ) return 0;
     return NodeHeight(root);
 }
 
 template<class T>
-std::variant<T> bin_tree<T>::Path(T data) {
+std::variant<int, std::vector<int>> bin_tree<T>::Path(T data) {
+    std::vector<int> ans;
+    ans.clear();
+    int height = 0;
     node* current = root;
-    std::variant<int> val;
-    int hight = 0;
     while ( current != nullptr ){
         if ( data < current->value ) current = current->ptrLeft;
         else {
-            if ( data > current->value ) current = current->ptrLeft;
-            else val = hight;
+            if ( data > current->value ) current = current->ptrRight;
+            else {
+                ans.push_back(height);
+                current = current->ptrRight;
+            }
         }
-        hight++;
+        height++;
     }
-    return val;
-    //при вызове функции зависает программа (i need your heeeelp<3)
+    if ( ans.empty() ) throw std::out_of_range("tree is haven't this element");
+    if ( ans.size() == 1 ) return ans.front();
+    return ans;
 }
 
 template<class T>
@@ -225,7 +235,7 @@ T bin_tree<T>::SumTrees(bin_tree<T> &m) {
 }
 
 template<class T>
-T bin_tree<T>::SumNodes(bin_tree::node *p) {
+T bin_tree<T>::SumNodes(const bin_tree::node *p) {
     T sum = 0;
     if ( p == nullptr ){
         return sum;
@@ -264,14 +274,7 @@ bool bin_tree<T>::operator>(const bin_tree<T> &m) {
 }
 
 template<class T>
-bin_tree<T>::bin_tree(const std::initializer_list<T> &list) {
-    for ( int i = 0; i < list.size(); i++){
-        Push(list.begin()[i]);
-    }
-}
-
-template<class T>
-size_t bin_tree<T>::WidthNode(bin_tree::node *p) {
+size_t bin_tree<T>::WidthNode(const bin_tree::node *p) {
     size_t sum = 0;
     if ( p->ptrLeft != nullptr ) sum++;
     if ( p->ptrRight != nullptr ) sum++;
@@ -279,7 +282,7 @@ size_t bin_tree<T>::WidthNode(bin_tree::node *p) {
 }
 
 template<class T>
-bool bin_tree<T>::ComparisonEqually(bin_tree::node *p, bin_tree::node *p1) {
+bool bin_tree<T>::ComparisonEqually(const bin_tree::node *p, const bin_tree::node *p1) {
     if ( p == nullptr && p1 == nullptr ) return true;
     if ( p == nullptr || p1 == nullptr ) return false;
     bool ans = true;
@@ -295,7 +298,7 @@ bool bin_tree<T>::ComparisonEqually(bin_tree::node *p, bin_tree::node *p1) {
 }
 
 template<class T>
-bool bin_tree<T>::ComparisonMore(bin_tree::node *p, bin_tree::node *p1) {
+bool bin_tree<T>::ComparisonMore(const bin_tree::node *p, const bin_tree::node *p1) {
     if ( p != nullptr && p1 == nullptr ) return true;
     if ( p == nullptr && p1 != nullptr ) return false;
     if ( p == nullptr && p1 == nullptr ) return false;
