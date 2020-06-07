@@ -38,10 +38,10 @@ public:
 		Node* ptr;//pointer to node
 	public:
 		Iterator() noexcept : ptr(nullptr) {};//const
-		Iterator(Node* root) noexcept : ptr(root) {};
+		explicit Iterator(Node* root) noexcept : ptr(root) {};
 		~Iterator() = default;//destr
 		Node* ret_ptr() { return ptr; };//return node
-		void operator=(const Iterator& iter);//copy oper
+		Iterator operator=(const Iterator& iter);//copy oper
 		bool operator!=(const Iterator& iter);//comparison oper !=
 		bool operator==(const Iterator& iter) { return !(*this != iter); };//comparison oper ==
 		void operator++();//iterator increase
@@ -56,6 +56,7 @@ public:
 	Iterator find(T_key key);//find element
 	Iterator begin();//return iterator(begin)
 	Iterator end();//return iterator(end)
+	const int size_map();//return size(map)
 
 	bool operator==(Map& o);//comparison oper.
 	bool operator!=(Map& o) { return !(*this == o); };
@@ -81,12 +82,15 @@ public:
 template <typename T_key, typename T_val>
 Map<T_key, T_val>::~Map()//destructor main class
 {
-	for (auto ptr = begin(); ptr != end();)
+	if (head)
 	{
-		auto save = ptr;
-		++save;
-		erase((*ptr).first);
-		ptr = save;
+		for (auto ptr = begin(); ptr != end();)
+		{
+			auto save = ptr;
+			++save;
+			erase((*ptr).first);
+			ptr = save;
+		}
 	}
 }
 
@@ -160,7 +164,7 @@ void Map<T_key, T_val>::erase(T_key key)
 template <typename T_key, typename T_val>
 typename Map<T_key, T_val>::Iterator Map<T_key, T_val>::find(T_key key)
 {
-	if (!head) { return tail; };
+	if (!head) { return end(); };
 
 	for (auto ptr = begin(); ptr != end(); ++ptr)
 	{
@@ -169,7 +173,7 @@ typename Map<T_key, T_val>::Iterator Map<T_key, T_val>::find(T_key key)
 			return ptr;
 		}
 	}
-	return tail;
+	return end();
 }
 
 template <typename T_key, typename T_val>
@@ -185,9 +189,10 @@ typename Map<T_key, T_val>::Iterator Map<T_key, T_val>::end()
 }
 
 template <typename T_key, typename T_val>
-void Map<T_key, T_val>::Iterator::operator=(const Iterator& iter)
+typename Map<T_key, T_val>::Iterator Map<T_key, T_val>::Iterator::operator=(const Iterator& iter)
 {
 	ptr = iter.ptr;
+	return *this;
 }
 
 template <typename T_key, typename T_val>
@@ -288,4 +293,10 @@ bool Map<T_key, T_val>::operator<(Map<T_key, T_val>& o)
 		}
 		return false;
 	}
+}
+
+template<typename T_key, typename T_val>
+const int Map<T_key, T_val>::size_map()
+{
+	return size;
 }
