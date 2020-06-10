@@ -30,10 +30,15 @@ private:
     T SumNodes ( const node* p);
     bool ComparisonEqually(const node *p, const node *p1);
     bool ComparisonMore(const node *p, const node *p1);
+    void DeleteNode ( node* p );
 
 public:
     gen_tree() = default;
-    ~gen_tree() = default;
+    ~gen_tree(){
+        DeleteNode(root);
+        size = 0;
+        root = nullptr;
+    }
     gen_tree(const std::initializer_list<T> &list);
     void Push(node* p, T data);
     void Push(T data);
@@ -260,5 +265,17 @@ bool gen_tree<T>::ComparisonMore(const gen_tree::node *p, const gen_tree::node *
     return ans;
 }
 
+template<class T>
+void gen_tree<T>::DeleteNode(gen_tree::node *p) {
+    if ( p->points.size() == 0) {
+        delete p;
+        return;
+    }
+    for (int i = 0; i < p->points.size(); i++){
+        DeleteNode(p->points.begin()[i]);
+    }
+    p->points.clear();
+    delete p;
+}
 
 #endif //LAB_03_GEN_TREE_H

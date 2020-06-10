@@ -1,5 +1,4 @@
 #include <iostream>
-#include "tree.h"
 #include "bin_tree.h"
 #include "gen_tree.h"
 
@@ -16,12 +15,8 @@ int main() {
     cout << endl;
     cout << tr1.Height();
     cout << endl;
-    auto res = get<1>(tr1.Path(33));
-    auto res2 = tr1.Path(22);
-        for (auto el: res)
-            cout << el << " ";
-        cout << endl;
-    cout << get<0>(res2);*/
+    auto res = tr1.Path(22);
+    cout << get<0>(res);*/
 
     gen_tree<int> tr3{1,3,2,4,5};
     gen_tree<int> tr4{1,3,2};

@@ -64,6 +64,14 @@ private:
         return p;
     }
 
+    node* BalanceBranch ( node* p ){
+        if ( p == nullptr ) return nullptr;
+        p->ptrLeft = BalanceBranch( p->ptrLeft );
+        p->ptrRight = BalanceBranch( p->ptrRight );
+        p = BalanceNode( p );
+        return p;
+    }
+
     T SumNodes (const node* p);
     void DeleteTree (node* p);
 
@@ -79,7 +87,6 @@ public:
     size_t Height ();
     std::variant<int, std::vector<int>> Path (T data );
     T SumTrees(bin_tree<T> &m);
-
     node* Find(const T data ){
         node* current = root;
         while ( current != nullptr ){
@@ -138,10 +145,9 @@ void bin_tree<T>::Push(T data) {
         }
         if ( data < previous->value) previous->ptrLeft = new node (data);
         else previous->ptrRight = new node (data);
-
     }
     size++;
-    root = BalanceNode(root);
+    root = BalanceBranch(root);
 }
 
 template<class T>
@@ -186,7 +192,7 @@ void bin_tree<T>::Pop(T data) {
 
     size--;
     if ( size == 0 ) root = nullptr;
-    else root = BalanceNode(root);
+    else root = BalanceBranch(root);
 }
 
 template<class T>
