@@ -41,7 +41,7 @@ public:
 		explicit Iterator(Node* root) noexcept : ptr(root) {};
 		~Iterator() = default;//destr
 		Node* ret_ptr() { return ptr; };//return node
-		Iterator operator=(const Iterator& iter);//copy oper
+		Iterator& operator=(const Iterator& iter);//copy oper
 		bool operator!=(const Iterator& iter);//comparison oper !=
 		bool operator==(const Iterator& iter) { return !(*this != iter); };//comparison oper ==
 		void operator++();//iterator increase
@@ -101,23 +101,45 @@ void Map<T_key, T_val>::emplace(ValueType val)
 	{
 		head = new Node(val);
 		head->linkNext = tail;
+		size++;
 	}
 	else
 	{
 		for (auto ptr = begin(); ptr != end(); ++ptr)
 		{
-			if ((*ptr).first == val.first)
+			if ((*ptr).first == val.first) return;
+			if ((*ptr).first < val.first)
 			{
-				//throw std::out_of_range("index more then size of structure");//заменить
+				Node* current = new Node(val);
+				if (ptr.ret_ptr() == head)
+				{
+					head->linkPrev = current;
+					current->linkNext = head;
+					head = current;
+					size++;
+					return;
+				}
+				else
+				{
+					current->linkPrev = ptr.ret_ptr()->linkPrev;
+					current->linkNext = ptr.ret_ptr();
+					ptr.ret_ptr()->linkPrev->linkNext = current;
+					ptr.ret_ptr()->linkPrev = current;
+					size++;
+					return;
+				}
+			}
+			if (ptr.ret_ptr()->linkNext == tail)
+			{
+				Node* current = new Node(val);
+				ptr.ret_ptr()->linkNext = current;
+				current->linkNext = tail;
+				current->linkPrev = ptr.ret_ptr();
+				size++;
 				return;
 			}
 		}
-		Node* current = new Node(val);
-		head->linkPrev = current;
-		current->linkNext = head;
-		head = current;
 	}
-	size++;
 }
 
 template <typename T_key, typename T_val>
@@ -189,7 +211,7 @@ typename Map<T_key, T_val>::Iterator Map<T_key, T_val>::end()
 }
 
 template <typename T_key, typename T_val>
-typename Map<T_key, T_val>::Iterator Map<T_key, T_val>::Iterator::operator=(const Iterator& iter)
+typename Map<T_key, T_val>::Iterator& Map<T_key, T_val>::Iterator::operator=(const Iterator& iter)
 {
 	ptr = iter.ptr;
 	return *this;
