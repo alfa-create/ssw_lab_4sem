@@ -88,15 +88,15 @@ public:
     }
 
     void Emplace (T_key key, T_val value);
-    void Erase ( T_key key);
+    T_val Erase ( T_key key);
     void Print();
     size_t Count () {
         return size;
     }
-    node* Find(const T_key key){
+    T_val Find(const T_key key){
         node* current = root;
         while ( current != nullptr ){
-            if ( current->value.key == key ) return current;
+            if ( current->value.key == key ) return current->value.val;
             if ( key < current->value.key ) current = current->ptrLeft;
             else current = current->ptrRight;
         }
@@ -116,6 +116,7 @@ public:
     bool operator<= (map<T_key,T_val> const& m){
         return !(this->operator>(m));
     }
+
 };
 
 template<typename T_key, typename T_val>
@@ -139,7 +140,7 @@ void map<T_key, T_val>::Emplace( T_key key, T_val value) {
 }
 
 template<typename T_key, typename T_val>
-void map<T_key, T_val>::Erase(T_key key) {
+T_val map<T_key, T_val>::Erase(T_key key) {
     if ( size == 0 ) throw std::out_of_range("map is empty");
     node* current = root;
     node* previous = root;
@@ -153,6 +154,8 @@ void map<T_key, T_val>::Erase(T_key key) {
         }
     }
     if ( current == nullptr ) throw std::out_of_range ("map haven't el-t with this key");
+
+    auto ret = current->value.val;
 
     if ( current->ptrRight == nullptr || current->ptrLeft == nullptr ){
         if ( current->ptrRight == nullptr && current->ptrLeft == nullptr ){
@@ -189,6 +192,7 @@ void map<T_key, T_val>::Erase(T_key key) {
         root = BalanceBranch(root);
     }
     size--;
+    return ret;
 }
 
 template<typename T_key, typename T_val>
